@@ -1,7 +1,7 @@
 it('should fetch and display current weather for London', () => {
   cy.intercept(
     'GET',
-    'https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=e467712b257e418838be97cc881a71de'
+    'https://api.openweathermap.org/data/2.5/weather?q=London'
   ).as('getCurrentWeather');
 
   cy.visit(baseUrl); // Make sure baseUrl is defined in your Cypress config or before block
