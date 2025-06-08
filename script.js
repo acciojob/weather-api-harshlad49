@@ -1,23 +1,20 @@
+it('should fetch and display current weather for London', () => {
+  cy.intercept(
+    'GET',
+    'https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=e467712b257e418838be97cc881a71de'
+  ).as('getCurrentWeather');
 
-    async function getWeather() {
- // Replace with your OpenWeatherMap API key
-      const city = 'London';
-      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}`;
+  cy.visit(baseUrl); // Make sure baseUrl is defined in your Cypress config or before block
 
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+  cy.contains('Get Current Weather').click();
 
-        const data = await response.json();
-        const weatherDescription = data.weather[0].main;
+  cy.wait('@getCurrentWeather').then((interception) => {
+    const response = interception.response.body;
+    const weatherMain = response.weather[0].main;
 
-        document.getElementById('weatherData').textContent = 
-          `Current weather in ${city}: ${weatherDescription}`;
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        document.getElementById('weatherData').textContent = 
-          'Failed to retrieve weather data.';
-      }
-    }
+    cy.get('#weatherData').should(
+      'have.text',
+      `Current weather in London: ${weatherMain}`
+    );
+  });
+});
