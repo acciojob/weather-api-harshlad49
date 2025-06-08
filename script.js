@@ -12,7 +12,7 @@ it('should fetch and display current weather for London', () => {
     const response = interception.response.body;
     const weatherMain = response.weather[0].main;
 
-    cy.get('#weatherData').should(
+    cy.get('weatherData').should(
       'have.text',
       `Current weather in London: ${weatherMain}`
     );
