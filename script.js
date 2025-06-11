@@ -1,20 +1,20 @@
-it('should fetch and display current weather for London', () => {
-  cy.intercept(
-    'GET',
-    'https://api.openweathermap.org/data/2.5/weather?q=London'
-  ).as('getCurrentWeather');
+function getWeather() {
+  const apiKey = 'YOUR_API_KEY'; // <-- Replace this with your real OpenWeatherMap API key
+  const city = 'London';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
-  cy.visit(baseUrl); // Make sure baseUrl is defined in your Cypress config or before block
-
-  cy.contains('Get Current Weather').click();
-
-  cy.wait('@getCurrentWeather').then((interception) => {
-    const response = interception.response.body;
-    const weatherMain = response.weather[0].main;
-
-    cy.get('weatherData').should(
-      'have.text',
-      `Current weather in London: ${weatherMain}`
-    );
-  });
-});
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const weatherMain = data.weather[0].main;
+      document.getElementById('weatherData').innerText = `Current weather in London: ${weatherMain}`;
+    })
+    .catch((error) => {
+      document.getElementById('weatherData').innerText = `Error: ${error.message}`;
+    });
+}
