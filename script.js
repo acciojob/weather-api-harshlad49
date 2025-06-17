@@ -1,20 +1,27 @@
-it('should fetch and display current weather for London', () => {
-  cy.intercept(
-    'GET',
-    'https://api.openweathermap.org/data/2.5/weather?q=London*'
-  ).as('getCurrentWeather');
+   async function getWeather() {
+      const city = 'London';
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
-  cy.visit(baseUrl);
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-  cy.contains('Get Current Weather').click();
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
 
-  cy.wait('@getCurrentWeather').then((interception) => {
-    const response = interception.response.body;
-    const weatherMain = response.weather[0].main;
+        const data = await response.json();
+        const weatherDescription = data.weather[0].main;
 
-    cy.get('#weatherData').should(
-      'have.text',
-      `Current weather in London: ${weatherMain}`
-    );
-  });
-});
+        document.getElementById('weatherData').textContent =
+          `Current weather in London: ${weatherDescription}`;
+      } catch (error) {
+        document.getElementById('weatherData').textContent =
+          'Error fetching weather data';
+        console.error(error);
+      }
+    }
