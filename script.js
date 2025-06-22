@@ -1,15 +1,11 @@
-   async function getWeather() {
+ 
+    async function getWeather() {
       const city = 'London';
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${c44617db6d6bec65efe58b8e08c13d0e}`;
+      const apiKey = 'b861f138dc9734473f8a29e0400303a'; // Replace with your own API key
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=London&appid=b861f138dc9734473f8a29e0400303a`;
 
       try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Failed to fetch weather data');
         }
