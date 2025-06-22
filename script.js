@@ -1,6 +1,6 @@
    async function getWeather() {
       const city = 'London';
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${c44617db6d6bec65efe58b8e08c13d0e}`;
 
       try {
         const response = await fetch(url, {
